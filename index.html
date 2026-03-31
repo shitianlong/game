@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - 网络游戏推荐系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="navbar">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <span>GameHub</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" id="home-link" class="active"><i class="fas fa-home"></i> 首页</a>
+                <a href="#" id="recommend-link"><i class="fas fa-star"></i> 游戏推荐</a>
+                <a href="#" id="friends-link"><i class="fas fa-users"></i> 好友管理</a>
+                <a href="#" id="market-link"><i class="fas fa-coins"></i> 游戏市场</a>
+                <a href="#" id="ranking-link"><i class="fas fa-trophy"></i> 排行榜</a>
+                <a href="#" id="forum-link"><i class="fas fa-comments"></i> 游戏论坛</a>
+            </nav>
+            <div class="user-section">
+                <div class="user-info" id="user-info">
+                    <span id="user-name">游客</span>
+                    <div class="user-avatar" id="user-avatar">?</div>
+                </div>
+                <button class="btn login-btn" id="login-btn">登录</button>
+                <button class="btn register-btn" id="register-btn">注册</button>
+                <button class="btn logout-btn" id="logout-btn" style="display: none;">退出</button>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 登录表单 -->
+            <section class="auth-section" id="login-section">
+                <div class="auth-container">
+                    <h2>用户登录</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-username"><i class="fas fa-user"></i> 账号</label>
+                            <input type="text" id="login-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password"><i class="fas fa-lock"></i> 密码</label>
+                            <input type="password" id="login-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-captcha"><i class="fas fa-shield-alt"></i> 验证码</label>
+                            <div class="captcha-container">
+                                <input type="text" id="login-captcha" maxlength="4" required>
+                                <div class="captcha-display" id="captcha-display">ABCD</div>
+                                <button type="button" class="captcha-refresh" id="captcha-refresh"><i class="fas fa-redo"></i></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn primary-btn">登录</button>
+                        <p class="switch-form">还没有账号？<a href="#" id="show-register">立即注册</a></p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 注册表单 -->
+            <section class="auth-section" id="register-section" style="display: none;">
+                <div class="auth-container">
+                    <h2>用户注册</h2>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-username"><i class="fas fa-user"></i> 账号</label>
+                            <input type="text" id="register-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password"><i class="fas fa-lock"></i> 密码</label>
+                            <input type="password" id="register-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm"><i class="fas fa-lock"></i> 确认密码</label>
+                            <input type="password" id="register-confirm" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-role"><i class="fas fa-user-tag"></i> 用户角色</label>
+                            <select id="register-role" required>
+                                <option value="player">玩家</option>
+                                <option value="admin">游戏管理者</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email"><i class="fas fa-envelope"></i> 邮箱</label>
+                            <input type="email" id="register-email" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn">注册</button>
+                        <p class="switch-form">已有账号？<a href="#" id="show-login">立即登录</a></p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 首页内容 -->
+            <section class="content-section" id="home-section">
+                <div class="welcome-banner">
+                    <h1>欢迎来到 GameHub</h1>
+                    <p>发现最适合你的游戏，与好友一起畅玩，探索游戏世界！</p>
+                    <div class="search-container">
+                        <input type="text" placeholder="搜索游戏、装备或玩家..." id="global-search">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="total-users">0</h3>
+                            <p>注册用户</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gamepad"></i>
+                        <div>
+                            <h3 id="total-games">0</h3>
+                            <p>游戏库</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div>
+                            <h3 id="active-tournaments">0</h3>
+                            <p>活跃赛事</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-comments"></i>
+                        <div>
+                            <h3 id="forum-posts">0</h3>
+                            <p>论坛帖子</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="featured-section">
+                    <h2>热门游戏</h2>
+                    <div class="games-grid" id="featured-games">
+                        <!-- 游戏卡片将通过JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏推荐页面 -->
+            <section class="content-section" id="recommend-section" style="display: none;">
+                <h2>个性化游戏推荐</h2>
+                <div class="recommendation-filters">
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="new">新游戏</button>
+                    <button class="filter-btn" data-filter="equipment">新装备</button>
+                    <button class="filter-btn" data-filter="trending">热门</button>
+                </div>
+                <div class="recommendations-grid" id="recommendations-grid">
+                    <!-- 推荐内容将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 好友管理页面 -->
+            <section class="content-section" id="friends-section" style="display: none;">
+                <div class="friends-header">
+                    <h2>好友管理</h2>
+                    <div class="friends-actions">
+                        <button class="btn secondary-btn" id="add-friend-btn"><i class="fas fa-user-plus"></i> 添加好友</button>
+                        <button class="btn secondary-btn" id="invite-friend-btn"><i class="fas fa-envelope"></i> 邀请游戏</button>
+                    </div>
+                </div>
+                
+                <div class="friends-tabs">
+                    <button class="tab-btn active" data-tab="online">在线好友 (<span id="online-count">0</span>)</button>
+                    <button class="tab-btn" data-tab="all">全部好友 (<span id="all-friends-count">0</span>)</button>
+                    <button class="tab-btn" data-tab="requests">好友请求 (<span id="requests-count">0</span>)</button>
+                </div>
+                
+                <div class="friends-list" id="friends-list">
+                    <!-- 好友列表将通过JS动态生成 -->
+                </div>
+                
+                <div class="game-invites" id="game-invites">
+                    <h3>游戏邀请</h3>
+                    <div class="invites-container">
+                        <!-- 游戏邀请将通过JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏市场页面 -->
+            <section class="content-section" id="market-section" style="display: none;">
+                <div class="market-header">
+                    <h2>游戏交易中心</h2>
+                    <div class="user-wallet">
+                        <i class="fas fa-coins"></i>
+                        <span>我的积分: <strong id="user-points">0</strong></span>
+                    </div>
+                </div>
+                
+                <div class="market-tabs">
+                    <button class="tab-btn active" data-tab="buy">购买装备</button>
+                    <button class="tab-btn" data-tab="sell">出售装备</button>
+                    <button class="tab-btn" data-tab="history">交易历史</button>
+                </div>
+                
+                <div class="market-content">
+                    <div class="equipment-grid" id="equipment-grid">
+                        <!-- 装备列表将通过JS动态生成 -->
+                    </div>
+                    
+                    <div class="sell-form" id="sell-form" style="display: none;">
+                        <h3>出售装备</h3>
+                        <div class="form-group">
+                            <label for="equipment-name">装备名称</label>
+                            <input type="text" id="equipment-name" placeholder="输入装备名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-price">出售价格 (积分)</label>
+                            <input type="number" id="equipment-price" min="1" placeholder="输入价格">
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-description">装备描述</label>
+                            <textarea id="equipment-description" placeholder="描述你的装备"></textarea>
+                        </div>
+                        <button class="btn primary-btn" id="submit-sell">上架装备</button>
+                    </div>
+                    
+                    <div class="transaction-history" id="transaction-history" style="display: none;">
+                        <h3>交易历史</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>类型</th>
+                                    <th>物品</th>
+                                    <th>价格</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                <!-- 交易历史将通过JS动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 排行榜页面 -->
+            <section class="content-section" id="ranking-section" style="display: none;">
+                <h2>游戏排行榜</h2>
+                <div class="ranking-tabs">
+                    <button class="tab-btn active" data-tab="players">玩家排行榜</button>
+                    <button class="tab-btn" data-tab="games">游戏热度榜</button>
+                    <button class="tab-btn" data-tab="clans">战队排行榜</button>
+                </div>
+                
+                <div class="ranking-content">
+                    <div class="ranking-table" id="players-ranking">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>玩家</th>
+                                    <th>等级</th>
+                                    <th>积分</th>
+                                    <th>胜率</th>
+                                </tr>
+                            </thead>
+                            <tbody id="players-table-body">
+                                <!-- 排行榜数据将通过JS动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="ranking-table" id="games-ranking" style="display: none;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>游戏名称</th>
+                                    <th>玩家数</th>
+                                    <th>评分</th>
+                                    <th>类型</th>
+                                </tr>
+                            </thead>
+                            <tbody id="games-table-body">
+                                <!-- 游戏排行榜数据将通过JS动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="ranking-table" id="clans-ranking" style="display: none;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>战队名称</th>
+                                    <th>成员数</th>
+                                    <th>胜场</th>
+                                    <th>积分</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clans-table-body">
+                                <!-- 战队排行榜数据将通过JS动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏论坛页面 -->
+            <section class="content-section" id="forum-section" style="display: none;">
+                <div class="forum-header">
+                    <h2>游戏论坛</h2>
+                    <button class="btn primary-btn" id="new-post-btn"><i class="fas fa-plus"></i> 发布新帖</button>
+                </div>
+                
+                <div class="forum-categories">
+                    <div class="category-card active" data-category="all">
+                        <i class="fas fa-comments"></i>
+                        <h3>全部讨论</h3>
+                        <span class="post-count" id="all-posts-count">0</span>
+                    </div>
+                    <div class="category-card" data-category="strategy">
+                        <i class="fas fa-chess-knight"></i>
+                        <h3>攻略讨论</h3>
+                        <span class="post-count" id="strategy-count">0</span>
+                    </div>
+                    <div class="category-card" data-category="feedback">
+                        <i class="fas fa-bullhorn"></i>
+                        <h3>游戏反馈</h3>
+                        <span class="post-count" id="feedback-count">0</span>
+                    </div>
+                    <div class="category-card" data-category="offtopic">
+                        <i class="fas fa-coffee"></i>
+                        <h3>闲聊灌水</h3>
+                        <span class="post-count" id="offtopic-count">0</span>
+                    </div>
+                </div>
+                
+                <div class="forum-posts" id="forum-posts">
+                    <!-- 论坛帖子将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 用户信息页面 -->
+            <section class="content-section" id="profile-section" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <div class="avatar-upload">
+                            <div class="avatar-preview" id="avatar-preview">?</div>
+                            <input type="file" id="avatar-upload" accept="image/*">
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="profile-username">用户名</h2>
+                            <p id="profile-role">角色</p>
+                            <div class="profile-stats">
+                                <div>
+                                    <strong id="profile-level">1</strong>
+                                    <span>等级</span>
+                                </div>
+                                <div>
+                                    <strong id="profile-points">0</strong>
+                                    <span>积分</span>
+                                </div>
+                                <div>
+                                    <strong id="profile-friends">0</strong>
+                                    <span>好友</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn edit-btn" id="edit-profile-btn"><i class="fas fa-edit"></i> 编辑资料</button>
+                </div>
+                
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="info">个人信息</button>
+                    <button class="tab-btn" data-tab="games">我的游戏</button>
+                    <button class="tab-btn" data-tab="activity">活动记录</button>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="info-tab" id="info-tab">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>账号</label>
+                                <span id="info-username">username</span>
+                            </div>
+                            <div class="info-item">
+                                <label>邮箱</label>
+                                <span id="info-email">user@example.com</span>
+                            </div>
+                            <div class="info-item">
+                                <label>注册日期</label>
+                                <span id="info-register-date">2023-01-01</span>
+                            </div>
+                            <div class="info-item">
+                                <label>最后登录</label>
+                                <span id="info-last-login">2023-06-15</span>
+                            </div>
+                            <div class="info-item">
+                                <label>游戏偏好</label>
+                                <span id="info-preferences">RPG, FPS, 策略</span>
+                            </div>
+                            <div class="info-item">
+                                <label>状态</label>
+                                <span id="info-status">在线</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="games-tab" id="games-tab" style="display: none;">
+                        <h3>我的游戏库</h3>
+                        <div class="user-games-grid" id="user-games-grid">
+                            <!-- 用户游戏将通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="activity-tab" id="activity-tab" style="display: none;">
+                        <h3>最近活动</h3>
+                        <div class="activity-list" id="activity-list">
+                            <!-- 活动记录将通过JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 弹窗 -->
+        <div class="modal" id="add-friend-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>添加好友</h2>
+                <div class="form-group">
+                    <label for="friend-username">玩家账号或ID</label>
+                    <input type="text" id="friend-username" placeholder="输入玩家账号或ID">
+                </div>
+                <button class="btn primary-btn" id="send-friend-request">发送好友请求</button>
+            </div>
+        </div>
+        
+        <div class="modal" id="new-post-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>发布新帖</h2>
+                <div class="form-group">
+                    <label for="post-title">标题</label>
+                    <input type="text" id="post-title" placeholder="输入帖子标题" required>
+                </div>
+                <div class="form-group">
+                    <label for="post-category">分类</label>
+                    <select id="post-category">
+                        <option value="strategy">攻略讨论</option>
+                        <option value="feedback">游戏反馈</option>
+                        <option value="offtopic">闲聊灌水</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="post-content">内容</label>
+                    <textarea id="post-content" placeholder="分享你的想法..." required></textarea>
+                </div>
+                <button class="btn primary-btn" id="submit-post">发布帖子</button>
+            </div>
+        </div>
+        
+        <div class="modal" id="edit-profile-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>编辑个人资料</h2>
+                <div class="form-group">
+                    <label for="edit-email">邮箱</label>
+                    <input type="email" id="edit-email" placeholder="输入新邮箱">
+                </div>
+                <div class="form-group">
+                    <label for="edit-preferences">游戏偏好</label>
+                    <select id="edit-preferences" multiple>
+                        <option value="rpg">RPG</option>
+                        <option value="fps">FPS</option>
+                        <option value="strategy">策略</option>
+                        <option value="simulation">模拟</option>
+                        <option value="sports">体育</option>
+                        <option value="racing">竞速</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">状态</label>
+                    <select id="edit-status">
+                        <option value="online">在线</option>
+                        <option value="busy">忙碌</option>
+                        <option value="away">离开</option>
+                        <option value="offline">离线</option>
+                    </select>
+                </div>
+                <button class="btn primary-btn" id="save-profile-changes">保存更改</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
